@@ -65,14 +65,13 @@ Latex block format: $$e=mc^2$$
 
 export const DEFAULT_MODELS: ModelRecord[] = [
   {
-    name: "Llama-3-8B-Instruct-q4f16_1-MLC-1k",
+    name: "Llama-3.1-8B-Instruct-q4f32_1-MLC-1k",
     display_name: "Llama | Cache: 8Gb | VRAM: 4600Mb",
     provider: "Meta | Cache: 8Gb | VRAM: 4500Mb",
     size: "8B",
-    quantization: "q4f16_1",
-    context_length: "1k",
-    family: "Llama 3",
-    vram_required_MB: 4598.34,
+    quantization: "q4f32",
+    family: "Llama 3.1",
+    vram_required_MB: 5295.7,
     low_resource_required: true,
     recommended_config: {
       temperature: 0.6,
@@ -82,13 +81,12 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     },
   },
   {
-    name: "Llama-3-8B-Instruct-q4f32_1-MLC",
+    name: "Llama-3.1-8B-Instruct-q4f32_1-MLC",
     display_name: "Llama",
     provider: "Meta | Cache: 8Gb | VRAM: 6100Mb",
     size: "8B",
-    quantization: "q4f32_1",
-    context_length: "4k",
-    family: "Llama 3",
+    quantization: "q4f32",
+    family: "Llama 3.1",
     vram_required_MB: 6101.01,
     low_resource_required: false,
     recommended_config: {
@@ -98,7 +96,7 @@ export const DEFAULT_MODELS: ModelRecord[] = [
       top_p: 0.9,
     },
   },
-   {
+  {
     name: "Phi-3-mini-4k-instruct-q4f32_1-MLC",
     display_name: "Phi",
     provider: "MLC | Cache: 8Gb | VRAM: 5400Mb",
@@ -149,7 +147,25 @@ export const DEFAULT_MODELS: ModelRecord[] = [
 
       top_p: 1,
     },
-  }
+  },
+  {
+    name: "TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC",
+    display_name: "TinyLlama",
+    provider: "Zhang Peiyuan | Cache: 1.1Gb | VRAM: 840Mb",
+    size: "1.1B",
+    quantization: "q4f32_1",
+    context_length: "2k",
+    family: "TinyLlama",
+    vram_required_MB: 839.98,
+    low_resource_required: true,
+    recommended_config: {
+      temperature: 1,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+
+      top_p: 1,
+    },
+  },
 ];
 
 export const CHAT_PAGE_SIZE = 15;

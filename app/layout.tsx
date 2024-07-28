@@ -23,25 +23,20 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
   },
   openGraph: {
-    title: 'Neurai LLM Chat',
-    description: 'Neurai Chat with AI large language models running natively in your browser. Enjoy private, server-free, seamless AI conversations.',
-    url: 'https://chat.neurai.org',
-    siteName: 'Neurai LLM Chat ',
+    title: "Neurai LLM Chat",
+    description:
+      "Neurai Chat with AI large language models running natively in your browser. Enjoy private, server-free, seamless AI conversations.",
+    url: "https://chat.neurai.org",
+    siteName: "Neurai LLM Chat ",
     images: [
       {
-        url: 'https://chat.neurai.org/og.png',
+        url: "https://chat.neurai.org/og.png",
         width: 800,
         height: 600,
       },
-      {
-        url: 'https://chat.neurai.org/og-alt.png',
-        width: 1800,
-        height: 1600,
-        alt: 'Neurai AI Chat',
-      },
     ],
-    locale: 'en_US',
-    type: 'website',
+    locale: "en_US",
+    type: "website",
   },
 };
 
