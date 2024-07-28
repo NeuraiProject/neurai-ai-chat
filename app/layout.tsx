@@ -6,9 +6,9 @@ import { getClientConfig } from "./config/client";
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Neurai LLM Chat",
+  title: "WebLLM Chat",
   description:
-    "Neurai Chat with AI large language models running natively in your browser. Enjoy private, server-free, seamless AI conversations.",
+    "Chat with AI large language models running natively in your browser. Enjoy private, server-free, seamless AI conversations.",
   viewport: {
     width: "device-width",
     initialScale: 1,
@@ -19,24 +19,8 @@ export const metadata: Metadata = {
     { media: "(prefers-color-scheme: dark)", color: "#151515" },
   ],
   appleWebApp: {
-    title: "Neurai LLM Chat",
+    title: "WebLLM Chat",
     statusBarStyle: "default",
-  },
-  openGraph: {
-    title: "Neurai LLM Chat",
-    description:
-      "Neurai Chat with AI large language models running natively in your browser. Enjoy private, server-free, seamless AI conversations.",
-    url: "https://chat.neurai.org",
-    siteName: "Neurai LLM Chat ",
-    images: [
-      {
-        url: "https://chat.neurai.org/og.png",
-        width: 800,
-        height: 600,
-      },
-    ],
-    locale: "en_US",
-    type: "website",
   },
 };
 
@@ -44,7 +28,7 @@ const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline';
     worker-src 'self';
-    connect-src 'self' blob: data: https:;
+    connect-src 'self' blob: data: https: http:;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: https:;
     font-src 'self';

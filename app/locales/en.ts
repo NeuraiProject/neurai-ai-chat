@@ -3,7 +3,7 @@ import { SubmitKey } from "../store/config";
 // if you are adding a new translation, please use PartialLocaleType instead of LocaleType
 
 const en = {
-  Title: "Neurai LLM Chat",
+  Title: "WebLLM Chat",
   Subtitle: "AI Models Running in Browser",
   WIP: "Coming Soon...",
   ChatItem: {
@@ -215,44 +215,22 @@ const en = {
       Check: "Check",
       NoAccess: "Enter API Key to check balance",
     },
-    Access: {
-      AccessCode: {
-        Title: "Access Code",
-        SubTitle: "Access control Enabled",
-        Placeholder: "Enter Code",
-      },
-      CustomEndpoint: {
-        Title: "Custom Endpoint",
-        SubTitle: "Use custom Azure or OpenAI service",
-      },
-      Provider: {
-        Title: "Model Provider",
-        SubTitle: "Select Azure or OpenAI",
-      },
-      CustomModel: {
-        Title: "Custom Models",
-        SubTitle: "Custom model options, seperated by comma",
-      },
-      Google: {
-        ApiKey: {
-          Title: "API Key",
-          SubTitle: "Obtain your API Key from Google AI",
-          Placeholder: "Enter your Google AI Studio API Key",
-        },
+    Model: "Model",
+    ModelClientType: {
+      Title: "Model Type",
+      WebLlm: "WebLLM Models",
+      MlcLlm: "MLC-LLM REST API (Advanced)",
+    },
 
-        Endpoint: {
-          Title: "Endpoint Address",
-          SubTitle: "Example:",
-        },
-
-        ApiVersion: {
-          Title: "API Version (specific to gemini-pro)",
-          SubTitle: "Select a specific API version",
-        },
+    MlcLlmApi: {
+      Title: "API Endpoint",
+      SubTitle: "Endpoint URL created by MLC-LLM serve command",
+      Connect: {
+        Title: "Connect",
+        SubTitle: "Connect to the API",
       },
     },
 
-    Model: "Model",
     Temperature: {
       Title: "Temperature",
       SubTitle: "A larger value makes the more random output",
@@ -395,7 +373,10 @@ const en = {
 
   ServiceWorker: {
     Error:
-      "The WebLLM worker has lost connection. Please close all tabs of Neurai LLM Chat and try opening Neurai LLM Chat again.",
+      "The WebLLM worker has lost connection. Please close all tabs of WebLLM Chat and try opening WebLLM Chat again.",
+  },
+  MlcLLMConnect: {
+    Title: "Connect to MLC-LLM API Endpoint",
   },
 };
 
