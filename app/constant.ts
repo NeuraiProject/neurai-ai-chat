@@ -81,13 +81,12 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     },
   },
   {
-    name: "Llama-3-8B-Instruct-q4f32_1-MLC",
+    name: "Llama-3.1-8B-Instruct-q4f32_1-MLC",
     display_name: "Llama",
     provider: "Meta | Cache: 8Gb | VRAM: 6100Mb",
     size: "8B",
-    quantization: "q4f32_1",
-    context_length: "4k",
-    family: "Llama 3",
+    quantization: "q4f32",
+    family: "Llama 3.1",
     vram_required_MB: 6101.01,
     low_resource_required: false,
     recommended_config: {
