@@ -65,13 +65,12 @@ Latex block format: $$e=mc^2$$
 
 export const DEFAULT_MODELS: ModelRecord[] = [
   {
-    name: "Llama-3-8B-Instruct-q4f16_1-MLC-1k",
+    name: "Llama-3.1-8B-Instruct-q4f16_1-MLC-1k",
     display_name: "Llama | Cache: 8Gb | VRAM: 4600Mb",
     provider: "Meta | Cache: 8Gb | VRAM: 4500Mb",
     size: "8B",
     quantization: "q4f16_1",
-    context_length: "1k",
-    family: "Llama 3",
+    family: "Llama 3.1",
     vram_required_MB: 4598.34,
     low_resource_required: true,
     recommended_config: {
