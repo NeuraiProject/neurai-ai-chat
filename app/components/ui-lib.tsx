@@ -13,7 +13,7 @@ import MinIcon from "../icons/min.svg";
 import Locale from "../locales";
 
 import { createRoot } from "react-dom/client";
-import React, { HTMLProps, useEffect, useState } from "react";
+import React, { HTMLProps, ReactNode, useEffect, useState } from "react";
 import { IconButton } from "./button";
 
 export function Popover(props: {
@@ -95,7 +95,6 @@ export function ListItem(props: {
       onClick={props.onClick}
     >
       <div className={styles["list-header"]}>
-        {props.icon && <div className={styles["list-icon"]}>{props.icon}</div>}
         <div className={styles["list-item-title"]}>
           <div>{props.title}</div>
           {props.subTitle && (
@@ -104,6 +103,7 @@ export function ListItem(props: {
             </div>
           )}
         </div>
+        {props.icon && <div className={styles["list-icon"]}>{props.icon}</div>}
       </div>
       {props.children}
     </div>
@@ -203,7 +203,7 @@ export function Modal(props: ModalProps) {
 
 export function showModal(props: ModalProps) {
   const div = document.createElement("div");
-  div.className = "modal-template";
+  div.className = "screen-model-container";
   document.body.appendChild(div);
 
   const root = createRoot(div);
@@ -340,7 +340,7 @@ export function Select(
 
 export function showConfirm(content: any) {
   const div = document.createElement("div");
-  div.className = "modal-template";
+  div.className = "screen-model-container";
   document.body.appendChild(div);
 
   const root = createRoot(div);
@@ -413,7 +413,7 @@ function PromptInput(props: {
 
 export function showPrompt(content: any, value = "", rows = 3) {
   const div = document.createElement("div");
-  div.className = "modal-template";
+  div.className = "screen-model-container";
   document.body.appendChild(div);
 
   const root = createRoot(div);
@@ -488,6 +488,8 @@ export function Selector<T>(props: {
     title: string;
     subTitle?: string;
     value: T;
+    family?: string;
+    icon?: JSX.Element;
   }>;
   defaultSelectedValue?: T;
   onSelection?: (selection: T[]) => void;
@@ -500,9 +502,15 @@ export function Selector<T>(props: {
         <List>
           {props.items.map((item, i) => {
             const selected = props.defaultSelectedValue === item.value;
+            const lastOfFamily =
+              i < props.items.length - 1 &&
+              item.family !== props.items[i + 1].family;
             return (
               <ListItem
-                className={styles["selector-item"]}
+                className={
+                  styles["selector-item"] +
+                  (lastOfFamily ? " " + styles["list-item-separator"] : "")
+                }
                 key={i}
                 title={item.title}
                 subTitle={item.subTitle}
@@ -510,6 +518,7 @@ export function Selector<T>(props: {
                   props.onSelection?.([item.value]);
                   props.onClose?.();
                 }}
+                icon={item.icon}
               >
                 {selected ? (
                   <div

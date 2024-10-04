@@ -1,19 +1,20 @@
-import {
-  ChatCompletionFinishReason,
-  CompletionUsage,
-} from "@neet-nestor/web-llm";
-import { CacheType, ModelType } from "../store";
+import { ChatCompletionFinishReason, CompletionUsage } from "@mlc-ai/web-llm";
+import { CacheType, Model } from "../store";
 export const ROLES = ["system", "user", "assistant"] as const;
 export type MessageRole = (typeof ROLES)[number];
 
 export const Models = ["gpt-3.5-turbo", "gpt-4"] as const;
-export type ChatModel = ModelType;
+export type ChatModel = Model;
 
 export interface MultimodalContent {
   type: "text" | "image_url";
   text?: string;
   image_url?: {
     url: string;
+  };
+  dimension?: {
+    width: number;
+    height: number;
   };
 }
 
@@ -26,6 +27,7 @@ export interface LLMConfig {
   model: string;
   cache: CacheType;
   temperature?: number;
+  context_window_size?: number;
   top_p?: number;
   stream?: boolean;
   presence_penalty?: number;
@@ -43,7 +45,6 @@ export interface ChatOptions {
     usage?: CompletionUsage,
   ) => void;
   onError?: (err: Error) => void;
-  onController?: (controller: AbortController) => void;
 }
 
 export interface LLMUsage {
@@ -57,14 +58,10 @@ export interface ModelRecord {
   provider?: string;
   size?: string;
   quantization?: string;
-  context_length?: string;
   family?: string;
-  vram_required_MB?: number;
-  buffer_size_required_bytes?: number;
-  low_resource_required?: boolean;
-  required_features?: string[];
-  recommended_config: {
+  recommended_config?: {
     temperature?: number;
+    context_window_size?: number;
     top_p?: number;
     presence_penalty?: number;
     frequency_penalty?: number;
@@ -73,6 +70,6 @@ export interface ModelRecord {
 
 export abstract class LLMApi {
   abstract chat(options: ChatOptions): Promise<void>;
-  abstract usage(): Promise<LLMUsage>;
   abstract abort(): Promise<void>;
+  abstract models(): Promise<ModelRecord[] | Model[]>;
 }

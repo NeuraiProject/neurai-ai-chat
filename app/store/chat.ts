@@ -3,7 +3,7 @@ import { trimTopic, getMessageTextContent } from "../utils";
 import log from "loglevel";
 import Locale, { getLang } from "../locales";
 import { showToast } from "../components/ui-lib";
-import { ModelConfig, ModelType, useAppConfig } from "./config";
+import { ModelConfig, Model, useAppConfig, ConfigType } from "./config";
 import { createEmptyTemplate, Template } from "./template";
 import {
   DEFAULT_INPUT_TEMPLATE,
@@ -11,15 +11,12 @@ import {
   DEFAULT_SYSTEM_TEMPLATE,
   StoreKey,
 } from "../constant";
-import { RequestMessage, MultimodalContent } from "../client/api";
+import { RequestMessage, MultimodalContent, LLMApi } from "../client/api";
 import { estimateTokenLength } from "../utils/token";
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
-import { WebLLMApi } from "../client/webllm";
-import {
-  ChatCompletionFinishReason,
-  CompletionUsage,
-} from "@neet-nestor/web-llm";
+import { ChatCompletionFinishReason, CompletionUsage } from "@mlc-ai/web-llm";
+import { ChatImage } from "../typing";
 
 export type ChatMessage = RequestMessage & {
   date: string;
@@ -27,7 +24,7 @@ export type ChatMessage = RequestMessage & {
   isError?: boolean;
   id: string;
   stopReason?: ChatCompletionFinishReason;
-  model?: ModelType;
+  model?: Model;
   usage?: CompletionUsage;
 };
 
@@ -95,13 +92,15 @@ function countMessages(msgs: ChatMessage[]) {
   );
 }
 
-function fillTemplateWith(input: string, modelConfig: ModelConfig) {
+function fillTemplateWith(input: string, modelConfig: ConfigType) {
   // Find the model in the DEFAULT_MODELS array that matches the modelConfig.model
-  const modelInfo = DEFAULT_MODELS.find((m) => m.name === modelConfig.model);
+  const modelInfo = DEFAULT_MODELS.find(
+    (m) => m.name === modelConfig.modelConfig.model,
+  );
 
   const vars = {
     provider: modelInfo?.provider || "unknown",
-    model: modelConfig.model,
+    model: modelConfig.modelConfig.model,
     time: new Date().toString(),
     lang: getLang(),
     input: input,
@@ -272,19 +271,19 @@ export const useChatStore = createPersistStore(
         }));
       },
 
-      onNewMessage(message: ChatMessage, webllm: WebLLMApi) {
+      onNewMessage(message: ChatMessage, llm: LLMApi) {
         get().updateCurrentSession((session) => {
           session.messages = session.messages.concat();
           session.lastUpdate = Date.now();
         });
         get().updateStat(message);
-        get().summarizeSession(webllm);
+        get().summarizeSession(llm);
       },
 
-      onUserInput(content: string, webllm: WebLLMApi, attachImages?: string[]) {
+      onUserInput(content: string, llm: LLMApi, attachImages?: ChatImage[]) {
         const modelConfig = useAppConfig.getState().modelConfig;
 
-        const userContent = fillTemplateWith(content, modelConfig);
+        const userContent = fillTemplateWith(content, useAppConfig.getState());
         log.debug("[User Input] after template: ", userContent);
 
         let mContent: string | MultimodalContent[] = userContent;
@@ -297,11 +296,15 @@ export const useChatStore = createPersistStore(
             },
           ];
           mContent = mContent.concat(
-            attachImages.map((url) => {
+            attachImages.map((imageData) => {
               return {
                 type: "image_url",
                 image_url: {
-                  url: url,
+                  url: imageData.url,
+                },
+                dimension: {
+                  width: imageData.width,
+                  height: imageData.height,
                 },
               };
             }),
@@ -338,7 +341,7 @@ export const useChatStore = createPersistStore(
         });
 
         // make request
-        webllm.chat({
+        llm.chat({
           messages: sendMessages,
           config: {
             ...modelConfig,
@@ -360,7 +363,7 @@ export const useChatStore = createPersistStore(
             botMessage.stopReason = stopReason;
             if (message) {
               botMessage.content = message;
-              get().onNewMessage(botMessage, webllm);
+              get().onNewMessage(botMessage, llm);
             }
             get().updateCurrentSession((session) => {
               session.isGenerating = false;
@@ -399,7 +402,8 @@ export const useChatStore = createPersistStore(
 
       getMessagesWithMemory() {
         const session = get().currentSession();
-        const modelConfig = useAppConfig.getState().modelConfig;
+        const config = useAppConfig.getState();
+        const modelConfig = config.modelConfig;
         const clearContextIndex = session.clearContextIndex ?? 0;
         const messages = session.messages.slice();
         const totalMessageCount = session.messages.length;
@@ -408,7 +412,7 @@ export const useChatStore = createPersistStore(
         const contextPrompts = session.template.context.slice();
 
         // system prompts, to get close to OpenAI Web ChatGPT
-        const shouldInjectSystemPrompts = modelConfig.enableInjectSystemPrompts;
+        const shouldInjectSystemPrompts = config.enableInjectSystemPrompts;
 
         var systemPrompts: ChatMessage[] = [];
         systemPrompts = shouldInjectSystemPrompts
@@ -416,7 +420,7 @@ export const useChatStore = createPersistStore(
               createMessage({
                 role: "system",
                 content: fillTemplateWith("", {
-                  ...modelConfig,
+                  ...config,
                   template: DEFAULT_SYSTEM_TEMPLATE,
                 }),
               }),
@@ -431,7 +435,7 @@ export const useChatStore = createPersistStore(
 
         // long term memory
         const shouldSendLongTermMemory =
-          modelConfig.sendMemory &&
+          config.sendMemory &&
           session.memoryPrompt &&
           session.memoryPrompt.length > 0 &&
           session.lastSummarizeIndex > clearContextIndex;
@@ -443,7 +447,7 @@ export const useChatStore = createPersistStore(
         // short term memory
         const shortTermMemoryStartIndex = Math.max(
           0,
-          totalMessageCount - modelConfig.historyMessageCount,
+          totalMessageCount - config.historyMessageCount,
         );
 
         // lets concat send messages, including 4 parts:
@@ -501,7 +505,7 @@ export const useChatStore = createPersistStore(
         });
       },
 
-      summarizeSession(webllm: WebLLMApi) {
+      summarizeSession(llm: LLMApi) {
         const config = useAppConfig.getState();
         const session = get().currentSession();
         const modelConfig = useAppConfig.getState().modelConfig;
@@ -522,7 +526,7 @@ export const useChatStore = createPersistStore(
               content: Locale.Store.Prompt.Topic,
             }),
           );
-          webllm.chat({
+          llm.chat({
             messages: topicMessages,
             config: {
               model: modelConfig.model,
@@ -551,7 +555,7 @@ export const useChatStore = createPersistStore(
         if (historyMsgLength > modelConfig?.max_tokens ?? 4000) {
           const n = toBeSummarizedMsgs.length;
           toBeSummarizedMsgs = toBeSummarizedMsgs.slice(
-            Math.max(0, n - modelConfig.historyMessageCount),
+            Math.max(0, n - config.historyMessageCount),
           );
         }
 
@@ -564,12 +568,12 @@ export const useChatStore = createPersistStore(
           "[Chat History] ",
           toBeSummarizedMsgs,
           historyMsgLength,
-          modelConfig.compressMessageLengthThreshold,
+          config.compressMessageLengthThreshold,
         );
 
         if (
-          historyMsgLength > modelConfig.compressMessageLengthThreshold &&
-          modelConfig.sendMemory
+          historyMsgLength > config.compressMessageLengthThreshold &&
+          config.sendMemory
         ) {
           /** Destruct max_tokens while summarizing
            * this param is just shit
@@ -604,7 +608,7 @@ export const useChatStore = createPersistStore(
           }
 
           log.debug("summarizeSession", messages);
-          webllm.chat({
+          llm.chat({
             messages: toBeSummarizedMsgs,
             config: {
               ...modelcfg,
@@ -635,17 +639,21 @@ export const useChatStore = createPersistStore(
           if (session.messages.length === 0) {
             return;
           }
-          const lastMessage = session.messages[session.messages.length - 1];
+          const messages = [...session.messages];
+          const lastMessage = messages[messages.length - 1];
           if (
             lastMessage.role === "assistant" &&
             lastMessage.streaming &&
             lastMessage.content.length === 0
           ) {
             // This message generation is interrupted by refresh and is stuck
-            session.messages.splice(session.messages.length - 1, 1);
+            messages.splice(session.messages.length - 1, 1);
           }
           // Reset streaming status for all messages
-          session.messages.forEach((m) => (m.streaming = false));
+          session.messages = messages.map((m) => ({
+            ...m,
+            streaming: false,
+          }));
         });
         set(() => ({ sessions }));
       },

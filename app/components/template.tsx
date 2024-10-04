@@ -22,7 +22,7 @@ import {
 import {
   ChatMessage,
   createMessage,
-  ModelType,
+  Model,
   useAppConfig,
   useChatStore,
 } from "../store";
@@ -67,7 +67,7 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number): T[] {
   return result;
 }
 
-export function TemplateAvatar(props: { avatar: string; model?: ModelType }) {
+export function TemplateAvatar(props: { avatar: string; model?: Model }) {
   return props.avatar !== DEFAULT_TEMPLATE_AVATAR ? (
     <Avatar avatar={props.avatar} />
   ) : (
@@ -238,7 +238,7 @@ export function ContextPrompts(props: {
         const text = getMessageTextContent(context[i]);
         const newContext: MultimodalContent[] = [{ type: "text", text }];
         for (const img of images) {
-          newContext.push({ type: "image_url", image_url: { url: img } });
+          newContext.push({ type: "image_url", image_url: { url: img.url } });
         }
         context[i].content = newContext;
       }
@@ -523,7 +523,7 @@ export function TemplatePage() {
       </div>
 
       {editingTemplate && (
-        <div className="modal-template">
+        <div className="screen-model-container">
           <Modal
             title={Locale.Template.EditModal.Title(editingTemplate?.builtin)}
             onClose={closeTemplateModal}

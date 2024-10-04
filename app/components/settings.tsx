@@ -9,15 +9,7 @@ import ClearIcon from "../icons/clear.svg";
 import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
 
-import {
-  Input,
-  List,
-  ListItem,
-  Modal,
-  Popover,
-  Select,
-  showConfirm,
-} from "./ui-lib";
+import { Input, List, ListItem, Modal, Select, showConfirm } from "./ui-lib";
 import { ModelConfigList } from "./model-config";
 
 import { IconButton } from "./button";
@@ -42,15 +34,15 @@ import { ErrorBoundary } from "./error";
 import { InputRange } from "./input-range";
 import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
-import { LogLevel } from "@neet-nestor/web-llm";
-import { WebLLMContext } from "../client/webllm";
+import { LogLevel } from "@mlc-ai/web-llm";
+import { WebLLMContext } from "../context";
 
 function EditPromptModal(props: { id: string; onClose: () => void }) {
   const promptStore = usePromptStore();
   const prompt = promptStore.get(props.id);
 
   return prompt ? (
-    <div className="modal-template">
+    <div className="screen-model-container">
       <Modal
         title={Locale.Settings.Prompt.EditModal.Title}
         onClose={props.onClose}
@@ -115,7 +107,7 @@ function UserPromptModal(props: { onClose?: () => void }) {
   }, [searchInput]);
 
   return (
-    <div className="modal-template">
+    <div className="screen-model-container">
       <Modal
         title={Locale.Settings.Prompt.Modal.Title}
         onClose={() => props.onClose?.()}
@@ -286,15 +278,87 @@ export function Settings() {
       </div>
       <div className={styles["settings"]}>
         <List>
-          <ModelConfigList
-            modelConfig={config.modelConfig}
-            selectModel={config.selectModel}
-            updateConfig={(updater) => {
-              const modelConfig = { ...config.modelConfig };
-              updater(modelConfig);
-              config.update((config) => (config.modelConfig = modelConfig));
-            }}
-          />
+          <ModelConfigList />
+        </List>
+
+        <List>
+          <ListItem
+            title={Locale.Settings.InjectSystemPrompts.Title}
+            subTitle={Locale.Settings.InjectSystemPrompts.SubTitle}
+          >
+            <input
+              type="checkbox"
+              checked={config.enableInjectSystemPrompts}
+              onChange={(e) =>
+                config.update(
+                  (config) =>
+                    (config.enableInjectSystemPrompts =
+                      e.currentTarget.checked),
+                )
+              }
+            ></input>
+          </ListItem>
+          <ListItem
+            title={Locale.Settings.InputTemplate.Title}
+            subTitle={Locale.Settings.InputTemplate.SubTitle}
+          >
+            <input
+              type="text"
+              value={config.template}
+              onChange={(e) =>
+                config.update(
+                  (config) => (config.template = e.currentTarget.value),
+                )
+              }
+            ></input>
+          </ListItem>
+          <ListItem
+            title={Locale.Settings.HistoryCount.Title}
+            subTitle={Locale.Settings.HistoryCount.SubTitle}
+          >
+            <InputRange
+              title={config.historyMessageCount.toString()}
+              value={config.historyMessageCount}
+              min="0"
+              max="64"
+              step="1"
+              onChange={(e) =>
+                config.update(
+                  (config) =>
+                    (config.historyMessageCount = e.target.valueAsNumber),
+                )
+              }
+            ></InputRange>
+          </ListItem>
+          <ListItem
+            title={Locale.Settings.CompressThreshold.Title}
+            subTitle={Locale.Settings.CompressThreshold.SubTitle}
+          >
+            <input
+              type="number"
+              min={500}
+              max={4000}
+              value={config.compressMessageLengthThreshold}
+              onChange={(e) =>
+                config.update(
+                  (config) =>
+                    (config.compressMessageLengthThreshold =
+                      e.currentTarget.valueAsNumber),
+                )
+              }
+            ></input>
+          </ListItem>
+          <ListItem title={Locale.Memory.Title} subTitle={Locale.Memory.Send}>
+            <input
+              type="checkbox"
+              checked={config.sendMemory}
+              onChange={(e) =>
+                config.update(
+                  (config) => (config.sendMemory = e.currentTarget.checked),
+                )
+              }
+            ></input>
+          </ListItem>
         </List>
 
         <List>

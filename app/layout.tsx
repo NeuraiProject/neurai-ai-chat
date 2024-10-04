@@ -6,9 +6,9 @@ import { getClientConfig } from "./config/client";
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Neurai LLM Chat",
+  title: "WebLLM Chat",
   description:
-    "Neurai Chat with AI large language models running natively in your browser. Enjoy private, server-free, seamless AI conversations.",
+    "Chat with AI large language models running natively in your browser. Enjoy private, server-free, seamless AI conversations.",
   viewport: {
     width: "device-width",
     initialScale: 1,
@@ -19,29 +19,8 @@ export const metadata: Metadata = {
     { media: "(prefers-color-scheme: dark)", color: "#151515" },
   ],
   appleWebApp: {
-    title: "Neurai LLM Chat",
+    title: "WebLLM Chat",
     statusBarStyle: "default",
-  },
-  openGraph: {
-    title: 'Neurai LLM Chat',
-    description: 'Neurai Chat with AI large language models running natively in your browser. Enjoy private, server-free, seamless AI conversations.',
-    url: 'https://chat.neurai.org',
-    siteName: 'Neurai LLM Chat ',
-    images: [
-      {
-        url: 'https://chat.neurai.org/og.png',
-        width: 800,
-        height: 600,
-      },
-      {
-        url: 'https://chat.neurai.org/og-alt.png',
-        width: 1800,
-        height: 1600,
-        alt: 'Neurai AI Chat',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
   },
 };
 
@@ -49,7 +28,7 @@ const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline';
     worker-src 'self';
-    connect-src 'self' blob: data: https:;
+    connect-src 'self' blob: data: https: http:;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: https:;
     font-src 'self';
@@ -74,6 +53,12 @@ export default function RootLayout({
         />
         <meta name="config" content={JSON.stringify(getClientConfig())} />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
+        <meta property="og:title" content="Neurai LLM Chat" />
+        <meta property="og:url" content="https://chat.neurai.org/" />
+        <meta property="og:image" content="/og-alt.png" />
+        <meta name="twitter:image" content="/og.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image:alt" content="Neurai LLM Chat" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"

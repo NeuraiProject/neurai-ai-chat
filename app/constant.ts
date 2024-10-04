@@ -1,7 +1,7 @@
 import { ModelRecord } from "./client/api";
 
-export const OWNER = "neuraiproject";
-export const REPO = "Neurai";
+export const OWNER = "NeuraiProject";
+export const REPO = "neurai-ai-chat";
 export const WEBLLM_HOME_URL = "https://neurai.org";
 export const REPO_URL = `https://github.com/${OWNER}/${REPO}`;
 export const ISSUE_URL = `https://github.com/${OWNER}/${REPO}/issues`;
@@ -57,6 +57,7 @@ export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lan
 
 export const DEFAULT_SYSTEM_TEMPLATE = `
 You are an AI large language model assistant trained by {{provider}}.
+You are currently engaging with users on WebLLM Chat, an open-source AI Chatbot UI developed by MLC.ai (Machine Learning Compilation).
 Model display_name:  {{model}}
 The current date and time is {{time}}.
 Latex inline format: \\(x^2\\) 
@@ -64,15 +65,113 @@ Latex block format: $$e=mc^2$$
 `;
 
 export const DEFAULT_MODELS: ModelRecord[] = [
+  // Llama-3.2
+  {
+    name: "Llama-3.2-1B-Instruct-q4f32_1-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    size: "1B",
+    quantization: "q4f32",
+    family: "Llama 3.2",
+    recommended_config: {
+      temperature: 0.6,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "Llama-3.2-1B-Instruct-q4f16_1-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    size: "1B",
+    quantization: "q4f16",
+    family: "Llama 3.2",
+    recommended_config: {
+      temperature: 0.6,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "Llama-3.2-1B-Instruct-q0f32-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    size: "1B",
+    quantization: "q0f32",
+    family: "Llama 3.2",
+    recommended_config: {
+      temperature: 0.6,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "Llama-3.2-1B-Instruct-q0f16-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    size: "1B",
+    quantization: "q0f16",
+    family: "Llama 3.2",
+    recommended_config: {
+      temperature: 0.6,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "Llama-3.2-3B-Instruct-q4f32_1-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    size: "3B",
+    quantization: "q4f32",
+    family: "Llama 3.2",
+    recommended_config: {
+      temperature: 0.6,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "Llama-3.2-3B-Instruct-q4f16_1-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    size: "3B",
+    quantization: "q4f16",
+    family: "Llama 3.2",
+    recommended_config: {
+      temperature: 0.6,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.9,
+    },
+  },
+  // Llama-3.1 8B
+  {
+    name: "Llama-3.1-8B-Instruct-q4f32_1-MLC-1k",
+    display_name: "Llama",
+    provider: "Meta",
+    size: "8B",
+    quantization: "q4f32",
+    family: "Llama 3.1",
+    recommended_config: {
+      temperature: 0.6,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.9,
+    },
+  },
   {
     name: "Llama-3.1-8B-Instruct-q4f16_1-MLC-1k",
-    display_name: "Llama | Cache: 8Gb | VRAM: 4600Mb",
-    provider: "Meta | Cache: 8Gb | VRAM: 4500Mb",
+    display_name: "Llama",
+    provider: "Meta",
     size: "8B",
-    quantization: "q4f16_1",
+    quantization: "q4f16",
     family: "Llama 3.1",
-    vram_required_MB: 4598.34,
-    low_resource_required: true,
     recommended_config: {
       temperature: 0.6,
       presence_penalty: 0,
@@ -83,12 +182,24 @@ export const DEFAULT_MODELS: ModelRecord[] = [
   {
     name: "Llama-3.1-8B-Instruct-q4f32_1-MLC",
     display_name: "Llama",
-    provider: "Meta | Cache: 8Gb | VRAM: 6100Mb",
+    provider: "Meta",
     size: "8B",
     quantization: "q4f32",
     family: "Llama 3.1",
-    vram_required_MB: 6101.01,
-    low_resource_required: false,
+    recommended_config: {
+      temperature: 0.6,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "Llama-3.1-8B-Instruct-q4f16_1-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    size: "8B",
+    quantization: "q4f16",
+    family: "Llama 3.1",
     recommended_config: {
       temperature: 0.6,
       presence_penalty: 0,
@@ -97,57 +208,264 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     },
   },
    {
-    name: "Phi-3-mini-4k-instruct-q4f32_1-MLC",
-    display_name: "Phi",
-    provider: "MLC | Cache: 8Gb | VRAM: 5400Mb",
-    quantization: "q4f32_1",
-    context_length: "4k",
-    family: "Phi 3 Mini",
-    vram_required_MB: 5483.12,
-    low_resource_required: false,
-    recommended_config: {
-      temperature: 1,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-
-      top_p: 1,
-    },
-  },
-  {
-    name: "Phi-3-mini-4k-instruct-q4f16_1-MLC-1k",
-    display_name: "Phi",
-    provider: "MLC | Cache: 8Gb | VRAM: 2500Mb",
-    quantization: "q4f16_1",
-    context_length: "1k",
-    family: "Phi 3 Mini",
-    vram_required_MB: 2520.07,
-    low_resource_required: true,
+    name: "Qwen2.5-0.5B-Instruct-q4f32_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "0.5B",
+    quantization: "q4f32",
+    family: "Qwen 2.5",
     recommended_config: {
       temperature: 0.7,
       presence_penalty: 0,
       frequency_penalty: 0,
-
+      top_p: 0.8,
+    },
+  },
+  {
+    name: "Qwen2.5-0.5B-Instruct-q4f16_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "0.5B",
+    quantization: "q4f16",
+    family: "Qwen 2.5",
+    recommended_config: {
+      temperature: 0.7,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.8,
+    },
+  },
+  {
+    name: "Qwen2.5-0.5B-Instruct-q0f16-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "0.5B",
+    quantization: "q0f16",
+    family: "Qwen 2.5",
+    recommended_config: {
+      temperature: 0.7,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.8,
+    },
+  },
+  {
+    name: "Qwen2.5-0.5B-Instruct-q0f32-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "0.5B",
+    quantization: "q0f32",
+    family: "Qwen 2.5",
+    recommended_config: {
+      temperature: 0.7,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.8,
+    },
+  },
+  {
+    name: "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "1.5B",
+    quantization: "q4f16",
+    family: "Qwen 2.5",
+    recommended_config: {
+      temperature: 0.7,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.8,
+    },
+  },
+  {
+    name: "Qwen2.5-1.5B-Instruct-q4f32_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "1.5B",
+    quantization: "q4f32",
+    family: "Qwen 2.5",
+    recommended_config: {
+      temperature: 0.7,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.8,
+    },
+  },
+  {
+    name: "Qwen2.5-3B-Instruct-q4f16_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "3B",
+    quantization: "q4f16",
+    family: "Qwen 2.5",
+    recommended_config: {
+      temperature: 0.7,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.8,
+    },
+  },
+  {
+    name: "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "3B",
+    quantization: "q4f32",
+    family: "Qwen 2.5",
+    recommended_config: {
+      temperature: 0.7,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.8,
+    },
+  },
+  {
+    name: "Qwen2.5-7B-Instruct-q4f16_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "7B",
+    quantization: "q4f16",
+    family: "Qwen 2.5",
+    recommended_config: {
+      temperature: 0.7,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.8,
+    },
+  },
+  {
+    name: "Qwen2.5-7B-Instruct-q4f32_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "7B",
+    quantization: "q4f32",
+    family: "Qwen 2.5",
+    recommended_config: {
+      temperature: 0.7,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.8,
+    },
+  },
+  // Qwen2.5-Coder
+  {
+    name: "Qwen2.5-Coder-1.5B-Instruct-q4f16_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "1.5B",
+    quantization: "q4f16",
+    family: "Qwen 2.5 Coder",
+    recommended_config: {
+      temperature: 1.0,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 1.0,
+    },
+  },
+  {
+    name: "Qwen2.5-Coder-1.5B-Instruct-q4f32_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "1.5B",
+    quantization: "q4f32",
+    family: "Qwen 2.5 Coder",
+    recommended_config: {
+      temperature: 1.0,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 1.0,
+    },
+  },
+  {
+    name: "Qwen2.5-Coder-7B-Instruct-q4f16_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "7B",
+    quantization: "q4f16",
+    family: "Qwen 2.5 Coder",
+    recommended_config: {
+      temperature: 1.0,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 1.0,
+    },
+  },
+  {
+    name: "Qwen2.5-Coder-7B-Instruct-q4f32_1-MLC",
+    display_name: "Qwen",
+    provider: "Alibaba",
+    size: "7B",
+    quantization: "q4f32",
+    family: "Qwen 2.5 Coder",
+    recommended_config: {
+      temperature: 1.0,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 1.0,
+    },
+  },
+  {
+    name: "Llama-3.1-70B-Instruct-q3f16_1-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    size: "70B",
+    quantization: "q3f16",
+    family: "Llama 3.1",
+    recommended_config: {
+      temperature: 0.6,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC",
+    display_name: "TinyLlama",
+    provider: "Zhang Peiyuan",
+    size: "1.1B",
+    quantization: "q4f16",
+    family: "TinyLlama",
+    recommended_config: {
+      temperature: 0.7,
       top_p: 0.95,
     },
   },
   {
-    name: "TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC",
+    name: "TinyLlama-1.1B-Chat-v0.4-q4f32_1-MLC",
     display_name: "TinyLlama",
-    provider: "Zhang Peiyuan | Cache: 1.1Gb | VRAM: 840Mb",
+    provider: "Zhang Peiyuan",
     size: "1.1B",
-    quantization: "q4f32_1",
-    context_length: "2k",
+    quantization: "q4f32",
     family: "TinyLlama",
-    vram_required_MB: 839.98,
-    low_resource_required: true,
     recommended_config: {
-      temperature: 1,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-
-      top_p: 1,
+      temperature: 0.7,
+      top_p: 0.95,
     },
-  }
+  },
+  {
+    name: "TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC-1k",
+    display_name: "TinyLlama",
+    provider: "Zhang Peiyuan",
+    size: "1.1B",
+    quantization: "q4f16",
+    family: "TinyLlama",
+    recommended_config: {
+      temperature: 0.7,
+      top_p: 0.95,
+    },
+  },
+  {
+    name: "TinyLlama-1.1B-Chat-v0.4-q4f32_1-MLC-1k",
+    display_name: "TinyLlama",
+    provider: "Zhang Peiyuan",
+    size: "1.1B",
+    quantization: "q4f32",
+    family: "TinyLlama",
+    recommended_config: {
+      temperature: 0.7,
+      top_p: 0.95,
+    },
+  },
 ];
 
 export const CHAT_PAGE_SIZE = 15;

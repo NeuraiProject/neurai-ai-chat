@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { ChatMessage, ModelType, useAppConfig, useChatStore } from "../store";
+import { ChatMessage, Model, useAppConfig, useChatStore } from "../store";
 import Locale from "../locales";
 import styles from "./exporter.module.scss";
 import {
@@ -46,7 +46,7 @@ const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
 
 export function ExportMessageModal(props: { onClose: () => void }) {
   return (
-    <div className="modal-template">
+    <div className="screen-model-container">
       <Modal
         title={Locale.Export.Title}
         onClose={props.onClose}
@@ -395,7 +395,7 @@ export function ImagePreviewer(props: {
           </div>
 
           <div>
-            <div className={styles["main-title"]}>Neurai LLM Chat</div>
+            <div className={styles["main-title"]}>WebLLM Chat</div>
             <div className={styles["sub-title"]}>{window.location.host}</div>
           </div>
           <div>
@@ -437,7 +437,7 @@ export function ImagePreviewer(props: {
                 {getMessageImages(m).length == 1 && (
                   <img
                     key={i}
-                    src={getMessageImages(m)[0]}
+                    src={getMessageImages(m)[0].url}
                     alt="message"
                     className={styles["message-image"]}
                   />
@@ -451,7 +451,7 @@ export function ImagePreviewer(props: {
                       } as React.CSSProperties
                     }
                   >
-                    {getMessageImages(m).map((src, i) => (
+                    {getMessageImages(m).map(({ url: src }, i) => (
                       <img
                         key={i}
                         src={src}
