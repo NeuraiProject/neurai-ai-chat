@@ -1,4 +1,6 @@
+import { prebuiltAppConfig } from "@mlc-ai/web-llm";
 import { ModelRecord } from "./client/api";
+import { getQuantization, getSize } from "./utils";
 
 export const OWNER = "NeuraiProject";
 export const REPO = "neurai-ai-chat";
@@ -57,21 +59,80 @@ export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lan
 
 export const DEFAULT_SYSTEM_TEMPLATE = `
 You are an AI large language model assistant trained by {{provider}}.
-You are currently engaging with users on WebLLM Chat, an open-source AI Chatbot UI developed by MLC.ai (Machine Learning Compilation).
+You are currently engaging with users on Neurai WebLLM Chat.
 Model display_name:  {{model}}
 The current date and time is {{time}}.
 Latex inline format: \\(x^2\\) 
 Latex block format: $$e=mc^2$$
 `;
 
-export const DEFAULT_MODELS: ModelRecord[] = [
+const DEFAULT_MODEL_BASES: ModelRecord[] = [
+  // SmolLM2
+  {
+    name: "SmolLM2-1.7B-Instruct-q4f16_1-MLC",
+    display_name: "SmolLM",
+    provider: "HuggingFaceTB",
+    family: "SmolLM2",
+    recommended_config: {
+      temperature: 1,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 1,
+    },
+  },
+  {
+    name: "SmolLM2-360M-Instruct-q0f16-MLC",
+    display_name: "SmolLM",
+    provider: "HuggingFaceTB",
+    family: "SmolLM2",
+    recommended_config: {
+      temperature: 1,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 1,
+    },
+  },
+  {
+    name: "SmolLM2-360M-Instruct-q0f32-MLC",
+    display_name: "SmolLM",
+    provider: "HuggingFaceTB",
+    family: "SmolLM2",
+    recommended_config: {
+      temperature: 1,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 1,
+    },
+  },
+  {
+    name: "SmolLM2-360M-Instruct-q4f16_1-MLC",
+    display_name: "SmolLM",
+    provider: "HuggingFaceTB",
+    family: "SmolLM2",
+    recommended_config: {
+      temperature: 1,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 1,
+    },
+  },
+  {
+    name: "SmolLM2-135M-Instruct-q0f16-MLC",
+    display_name: "SmolLM",
+    provider: "HuggingFaceTB",
+    family: "SmolLM2",
+    recommended_config: {
+      temperature: 1,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      top_p: 1,
+    },
+  },
   // Llama-3.2
   {
     name: "Llama-3.2-1B-Instruct-q4f32_1-MLC",
     display_name: "Llama",
     provider: "Meta",
-    size: "1B",
-    quantization: "q4f32",
     family: "Llama 3.2",
     recommended_config: {
       temperature: 0.6,
@@ -84,8 +145,6 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     name: "Llama-3.2-1B-Instruct-q4f16_1-MLC",
     display_name: "Llama",
     provider: "Meta",
-    size: "1B",
-    quantization: "q4f16",
     family: "Llama 3.2",
     recommended_config: {
       temperature: 0.6,
@@ -98,8 +157,6 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     name: "Llama-3.2-1B-Instruct-q0f32-MLC",
     display_name: "Llama",
     provider: "Meta",
-    size: "1B",
-    quantization: "q0f32",
     family: "Llama 3.2",
     recommended_config: {
       temperature: 0.6,
@@ -112,8 +169,6 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     name: "Llama-3.2-1B-Instruct-q0f16-MLC",
     display_name: "Llama",
     provider: "Meta",
-    size: "1B",
-    quantization: "q0f16",
     family: "Llama 3.2",
     recommended_config: {
       temperature: 0.6,
@@ -126,8 +181,6 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     name: "Llama-3.2-3B-Instruct-q4f32_1-MLC",
     display_name: "Llama",
     provider: "Meta",
-    size: "3B",
-    quantization: "q4f32",
     family: "Llama 3.2",
     recommended_config: {
       temperature: 0.6,
@@ -140,8 +193,6 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     name: "Llama-3.2-3B-Instruct-q4f16_1-MLC",
     display_name: "Llama",
     provider: "Meta",
-    size: "3B",
-    quantization: "q4f16",
     family: "Llama 3.2",
     recommended_config: {
       temperature: 0.6,
@@ -150,251 +201,53 @@ export const DEFAULT_MODELS: ModelRecord[] = [
       top_p: 0.9,
     },
   },
-  // SmolLM
   {
-    name: "SmolLM-1.7B-Instruct-q0f16-MLC",
-    display_name: "SmolLM",
-    provider: "SmolLM",
-    size: "1.7B",
-    quantization: "q0f16",
-    family: "SmolLM",
-    recommended_config: {
-      temperature: 0.6,
-      top_p: 0.92,
-    },
-  },
-  {
-    name: "SmolLM-360M-Instruct-q0f16-MLC",
-    display_name: "SmolLM",
-    provider: "SmolLM",
-    size: "360M",
-    quantization: "q0f16",
-    family: "SmolLM",
-    recommended_config: {
-      temperature: 0.6,
-      top_p: 0.92,
-    },
-  },
-  {
-    name: "SmolLM-135M-Instruct-q0f16-MLC",
-    display_name: "SmolLM",
-    provider: "SmolLM",
-    size: "135M",
-    quantization: "q0f16",
-    family: "SmolLM",
-    recommended_config: {
-      temperature: 0.6,
-      top_p: 0.92,
-    },
-  },
-   {
-    name: "Qwen2.5-0.5B-Instruct-q4f32_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "0.5B",
-    quantization: "q4f32",
-    family: "Qwen 2.5",
-    recommended_config: {
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 0.8,
-    },
-  },
-  {
-    name: "Qwen2.5-0.5B-Instruct-q4f16_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "0.5B",
-    quantization: "q4f16",
-    family: "Qwen 2.5",
-    recommended_config: {
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 0.8,
-    },
-  },
-  {
-    name: "Qwen2.5-0.5B-Instruct-q0f16-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "0.5B",
-    quantization: "q0f16",
-    family: "Qwen 2.5",
-    recommended_config: {
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 0.8,
-    },
-  },
-  {
-    name: "Qwen2.5-0.5B-Instruct-q0f32-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "0.5B",
-    quantization: "q0f32",
-    family: "Qwen 2.5",
-    recommended_config: {
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 0.8,
-    },
-  },
-  {
-    name: "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "1.5B",
-    quantization: "q4f16",
-    family: "Qwen 2.5",
-    recommended_config: {
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 0.8,
-    },
-  },
-  {
-    name: "Qwen2.5-1.5B-Instruct-q4f32_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "1.5B",
-    quantization: "q4f32",
-    family: "Qwen 2.5",
-    recommended_config: {
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 0.8,
-    },
-  },
-  {
-    name: "Qwen2.5-3B-Instruct-q4f16_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "3B",
-    quantization: "q4f16",
-    family: "Qwen 2.5",
-    recommended_config: {
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 0.8,
-    },
-  },
-  {
-    name: "Qwen2.5-3B-Instruct-q4f32_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "3B",
-    quantization: "q4f32",
-    family: "Qwen 2.5",
-    recommended_config: {
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 0.8,
-    },
-  },
-  {
-    name: "Qwen2.5-7B-Instruct-q4f16_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "7B",
-    quantization: "q4f16",
-    family: "Qwen 2.5",
-    recommended_config: {
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 0.8,
-    },
-  },
-  {
-    name: "Qwen2.5-7B-Instruct-q4f32_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "7B",
-    quantization: "q4f32",
-    family: "Qwen 2.5",
-    recommended_config: {
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 0.8,
-    },
-  },
-  // Qwen2.5-Coder
-  {
-    name: "Qwen2.5-Coder-1.5B-Instruct-q4f16_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "1.5B",
-    quantization: "q4f16",
-    family: "Qwen 2.5 Coder",
-    recommended_config: {
-      temperature: 1.0,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 1.0,
-    },
-  },
-  {
-    name: "Qwen2.5-Coder-1.5B-Instruct-q4f32_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "1.5B",
-    quantization: "q4f32",
-    family: "Qwen 2.5 Coder",
-    recommended_config: {
-      temperature: 1.0,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 1.0,
-    },
-  },
-  {
-    name: "Qwen2.5-Coder-7B-Instruct-q4f16_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "7B",
-    quantization: "q4f16",
-    family: "Qwen 2.5 Coder",
-    recommended_config: {
-      temperature: 1.0,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 1.0,
-    },
-  },
-  {
-    name: "Qwen2.5-Coder-7B-Instruct-q4f32_1-MLC",
-    display_name: "Qwen",
-    provider: "Alibaba",
-    size: "7B",
-    quantization: "q4f32",
-    family: "Qwen 2.5 Coder",
-    recommended_config: {
-      temperature: 1.0,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-      top_p: 1.0,
-    },
-  },
-  {
-    name: "Llama-3.1-70B-Instruct-q3f16_1-MLC",
+    name: "Llama-2-7b-chat-hf-q4f32_1-MLC-1k",
     display_name: "Llama",
     provider: "Meta",
-    size: "70B",
-    quantization: "q3f16",
-    family: "Llama 3.1",
+    family: "Llama 2",
     recommended_config: {
       temperature: 0.6,
-      presence_penalty: 0,
-      frequency_penalty: 0,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "Llama-2-7b-chat-hf-q4f16_1-MLC-1k",
+    display_name: "Llama",
+    provider: "Meta",
+    family: "Llama 2",
+    recommended_config: {
+      temperature: 0.6,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "Llama-2-7b-chat-hf-q4f32_1-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    family: "Llama 2",
+    recommended_config: {
+      temperature: 0.6,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "Llama-2-7b-chat-hf-q4f16_1-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    family: "Llama 2",
+    recommended_config: {
+      temperature: 0.6,
+      top_p: 0.9,
+    },
+  },
+  {
+    name: "Llama-2-13b-chat-hf-q4f16_1-MLC",
+    display_name: "Llama",
+    provider: "Meta",
+    family: "Llama 2",
+    recommended_config: {
+      temperature: 0.6,
       top_p: 0.9,
     },
   },
@@ -402,8 +255,6 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     name: "TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC",
     display_name: "TinyLlama",
     provider: "Zhang Peiyuan",
-    size: "1.1B",
-    quantization: "q4f16",
     family: "TinyLlama",
     recommended_config: {
       temperature: 0.7,
@@ -414,8 +265,6 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     name: "TinyLlama-1.1B-Chat-v0.4-q4f32_1-MLC",
     display_name: "TinyLlama",
     provider: "Zhang Peiyuan",
-    size: "1.1B",
-    quantization: "q4f32",
     family: "TinyLlama",
     recommended_config: {
       temperature: 0.7,
@@ -426,8 +275,6 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     name: "TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC-1k",
     display_name: "TinyLlama",
     provider: "Zhang Peiyuan",
-    size: "1.1B",
-    quantization: "q4f16",
     family: "TinyLlama",
     recommended_config: {
       temperature: 0.7,
@@ -438,8 +285,6 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     name: "TinyLlama-1.1B-Chat-v0.4-q4f32_1-MLC-1k",
     display_name: "TinyLlama",
     provider: "Zhang Peiyuan",
-    size: "1.1B",
-    quantization: "q4f32",
     family: "TinyLlama",
     recommended_config: {
       temperature: 0.7,
@@ -447,6 +292,24 @@ export const DEFAULT_MODELS: ModelRecord[] = [
     },
   },
 ];
+
+export const DEFAULT_MODELS: ModelRecord[] = DEFAULT_MODEL_BASES.filter(
+  (model) => {
+    if (
+      !prebuiltAppConfig.model_list.map((m) => m.model_id).includes(model.name)
+    ) {
+      console.warn(
+        `Model ${model.name} not supported by current WebLLM version.`,
+      );
+      return false;
+    }
+    return true;
+  },
+).map((model) => ({
+  ...model,
+  size: getSize(model.name),
+  quantization: getQuantization(model.name),
+}));
 
 export const CHAT_PAGE_SIZE = 15;
 export const MAX_RENDER_MSG_COUNT = 45;

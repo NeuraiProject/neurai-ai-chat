@@ -78,7 +78,7 @@ export type ConfigType = {
   modelConfig: ModelConfig;
 };
 
-const DEFAULT_MODEL = "Llama-3.2-1B-Instruct-q4f32_1-MLC";
+const DEFAULT_MODEL = "SmolLM2-360M-Instruct-q0f16-MLC";
 
 const DEFAULT_MODEL_CONFIG: ModelConfig = {
   model: DEFAULT_MODEL,
@@ -217,9 +217,9 @@ export const useAppConfig = createPersistStore(
   }),
   {
     name: StoreKey.Config,
-    version: 0.58,
+    version: 0.6,
     migrate: (persistedState, version) => {
-      if (version < 0.58) {
+      if (version < 0.6) {
         return {
           ...DEFAULT_CONFIG,
           ...(persistedState as any),
