@@ -78,7 +78,7 @@ export type ConfigType = {
   modelConfig: ModelConfig;
 };
 
-const DEFAULT_MODEL = "SmolLM2-360M-Instruct-q0f16-MLC";
+const DEFAULT_MODEL = "Llama-3.2-1B-Instruct-q4f32_1-MLC";
 
 const DEFAULT_MODEL_CONFIG: ModelConfig = {
   model: DEFAULT_MODEL,

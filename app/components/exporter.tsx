@@ -22,8 +22,8 @@ import {
 import CopyIcon from "../icons/copy.svg";
 import LoadingIcon from "../icons/three-dots.svg";
 import ShareIcon from "../icons/share.svg";
-import MlcIcon from "../icons/mlc.svg";
-import MlcIconPng from "../icons/mlc.png";
+import MlcIcon from "../icons/neurai.svg";
+import MlcIconPng from "../icons/neurai.png";
 
 import DownloadIcon from "../icons/download.svg";
 import { useEffect, useMemo, useRef, useState } from "react";
