@@ -53,6 +53,9 @@ yarn dev
 
 # 4. Build
 yarn build
+
+# 5. Experto HTML + JS
+yarn export
 ```
 
 ## Deployment
